@@ -78,10 +78,10 @@ function TodoApp() {
                         onChange={(e) => setNewTask({ ...newTask, title: e.target.value })}
                         InputProps={{
                             style: {
-                                color: 'white',       // Set text color to white
-                                borderColor: 'white',  // Set border color to white
+                                color: 'yellow',       // Set text color to white
+                                borderColor: 'yellow',  // Set border color to white
                                 '&:hover': {
-                                    borderColor: 'white', // Set border color to white on hover
+                                    borderColor: 'yellow', // Set border color to white on hover
                                 },
                             },
                         }}
