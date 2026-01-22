@@ -6,9 +6,10 @@ variables:
   value: $(System.DefaultWorkingDirectory)/ReactTodoUIMonolith-main
 - group: Sonarqube Token
 stages:
-- stage: Sonarqube
+- stage: StaticcodeAnalysis
   jobs:
-  - job: SonarQube
+  - job: Static_code_AnalysisSonarQube
+    displayName: Static code Analysis (sonarQube)
     steps:
     # - task: SonarQubePrepare@8
     #   inputs:
@@ -22,13 +23,16 @@ stages:
     # - task: SonarQubeAnalyze@8
     #   inputs:
     #     jdkversion: 'JAVA_HOME_17_X64'
-    # - task: SonarQubePublish@8
-    #   inputs:
-    #     pollingTimeoutSec: '300'
+
     - task: PowerShell@2
+      displayName: Static code Analysis (sonarQube)
       inputs:
         targetType: 'inline'
         script: 'npx @sonar/scan -D sonar.host.url=http://localhost:9000 -D sonar.token=$(token) -D sonar.projectKey=TodouimonolithicSonar'
+    - task: SonarQubePublish@8
+      displayName: publish sonar result
+      inputs:
+        pollingTimeoutSec: '300'
 - stage: linting
   jobs:
   - job: lint
@@ -119,6 +123,7 @@ stages:
         readyTimeout: '20000'
     - task: SSH@0
       displayName: copy the files in nginx
+      continueOnError: true
       inputs:
         sshEndpoint: 'appdeployeconn'
         runOptions: 'inline'
