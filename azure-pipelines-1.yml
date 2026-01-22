@@ -28,7 +28,7 @@ stages:
     - task: PowerShell@2
       inputs:
         targetType: 'inline'
-        script: 'npx @sonar/scan -D sonar.host.url=http://localhost:9000 -D sonar.token=$(Sonarqube Token) -D sonar.projectKey=TodouimonolithicSonar'
+        script: 'npx @sonar/scan -D sonar.host.url=http://localhost:9000 -D sonar.token=$(token) -D sonar.projectKey=TodouimonolithicSonar'
 - stage: linting
   jobs:
   - job: lint
