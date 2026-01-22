@@ -8,21 +8,25 @@ stages:
   jobs:
   - job: SonarQube
     steps:
-    - task: SonarQubePrepare@8
+    # - task: SonarQubePrepare@8
+    #   inputs:
+    #     SonarQube: 'Sonarconnectionnew'
+    #     scannerMode: 'cli'
+    #     configMode: 'manual'
+    #     cliProjectKey: 'TodouimonolithicSonar'
+    #     cliSources: '$(System.DefaultWorkingDirectory)/ReactTodoUIMonolith-main'
+    #     extraProperties: |
+    #       sonar.branch.name=
+    # - task: SonarQubeAnalyze@8
+    #   inputs:
+    #     jdkversion: 'JAVA_HOME_17_X64'
+    # - task: SonarQubePublish@8
+    #   inputs:
+    #     pollingTimeoutSec: '300'
+    - task: PowerShell@2
       inputs:
-        SonarQube: 'Sonarconnectionnew'
-        scannerMode: 'cli'
-        configMode: 'manual'
-        cliProjectKey: 'TodouimonolithicSonar'
-        cliSources: '$(System.DefaultWorkingDirectory)/ReactTodoUIMonolith-main'
-        extraProperties: |
-          sonar.branch.name=
-    - task: SonarQubeAnalyze@8
-      inputs:
-        jdkversion: 'JAVA_HOME_17_X64'
-    - task: SonarQubePublish@8
-      inputs:
-        pollingTimeoutSec: '300'
+        targetType: 'inline'
+        script: 'npx @sonar/scan -D sonar.host.url=http://localhost:9000 -D sonar.token=sqp_86a67cb86bd223dfd69d62e49ee4ba9f8ef3130a -D sonar.projectKey=TodouimonolithicSonar'
 - stage: linting
   jobs:
   - job: lint
