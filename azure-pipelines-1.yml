@@ -29,10 +29,10 @@ stages:
       inputs:
         targetType: 'inline'
         script: 'npx @sonar/scan -D sonar.host.url=http://localhost:9000 -D sonar.token=$(token) -D sonar.projectKey=TodouimonolithicSonar'
-    - task: SonarQubePublish@8
-      displayName: publish sonar result
-      inputs:
-        pollingTimeoutSec: '300'
+    # - task: SonarQubePublish@8
+    #   displayName: publish sonar result
+    #   inputs:
+    #     pollingTimeoutSec: '300'
 - stage: linting
   jobs:
   - job: lint
