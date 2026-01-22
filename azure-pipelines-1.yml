@@ -15,6 +15,8 @@ stages:
         configMode: 'manual'
         cliProjectKey: 'TodouimonolithicSonar'
         cliSources: '$(System.DefaultWorkingDirectory)/ReactTodoUIMonolith-main'
+        extraProperties: |
+          sonar.branch.name=
     - task: SonarQubeAnalyze@8
       inputs:
         jdkversion: 'JAVA_HOME_17_X64'
