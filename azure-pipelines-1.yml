@@ -4,9 +4,26 @@ pool: New_Application_pipeline
 variables:
   dir: $(System.DefaultWorkingDirectory)/ReactTodoUIMonolith-main
 stages:
+- stage: Sonarqube
+  jobs:
+  - job: SonarQube
+    steps:
+    - task: SonarQubePrepare@8
+      inputs:
+        SonarQube: 'Sonarconnectionnew'
+        scannerMode: 'cli'
+        configMode: 'manual'
+        cliProjectKey: 'TodouimonolithicSonar'
+        cliSources: '$(System.DefaultWorkingDirectory)/ReactTodoUIMonolith-main'
+    - task: SonarQubeAnalyze@8
+      inputs:
+        jdkversion: 'JAVA_HOME_17_X64'
+    - task: SonarQubePublish@8
+      inputs:
+        pollingTimeoutSec: '300'
 - stage: linting
   jobs:
-  - job: lintkk
+  - job: lint
     displayName: java script linting(Biome)
     steps:
 
