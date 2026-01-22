@@ -131,4 +131,5 @@ stages:
           sudo apt update
           sudo apt install nginx -y
           sudo cp -r /home/useradmin/* /var/www/html
+          sudo systemctl restart nginx
         readyTimeout: '20000'
