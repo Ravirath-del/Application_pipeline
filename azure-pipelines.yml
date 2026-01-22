@@ -1,0 +1,30 @@
+trigger:
+- main
+pool: New_Application_pipeline
+stages:
+- stage: linting
+  jobs:
+  - job: lint
+    displayName: java script linting(Biome)
+    steps:
+    # - task: PowerShell@2
+    #   displayName: js lint (Biome)
+    #   inputs:
+    #     targetType: 'inline'
+    #     script: 'E:\Tools\biome.exe lint $(System.DefaultWorkingDirectory)\ReactTodoUIMonolith-main\src'
+    - task: PowerShell@2
+      displayName: java script linting(Biome url)
+      continueOnError: true
+      inputs:
+        targetType: 'inline'
+        script: |
+          Invoke-WebRequest -Uri "https://github.com/biomejs/biome/releases/download/%40biomejs%2Fbiome%402.3.11/biome-win32-x64.exe" -OutFile "$(Agent.ToolsDirectory)/biome.exe"
+          $(Agent.ToolsDirectory)/biome.exe lint $(System.DefaultWorkingDirectory)/ReactTodoUIMonolith-main/src/
+    - task: PowerShell@2
+      displayName: css lint(stylint)
+      inputs:
+        targetType: 'inline'
+        script: |
+          npm install -g stylelint
+          npm install -g stylelint-config-standard 
+          npx stylelint $(System.DefaultWorkingDirectory)/ReactTodoUIMonolith-main/src/App.css
