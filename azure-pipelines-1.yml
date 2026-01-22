@@ -2,7 +2,8 @@ trigger:
 - main
 pool: New_Application_pipeline
 variables:
-  dir: $(System.DefaultWorkingDirectory)/ReactTodoUIMonolith-main
+- name: dir
+  value: $(System.DefaultWorkingDirectory)/ReactTodoUIMonolith-main
 - group: Sonarqube Token
 stages:
 - stage: Sonarqube
@@ -27,7 +28,7 @@ stages:
     - task: PowerShell@2
       inputs:
         targetType: 'inline'
-        script: 'npx @sonar/scan -D sonar.host.url=http://localhost:9000 -D sonar.token=sqp_86a67cb86bd223dfd69d62e49ee4ba9f8ef3130a -D sonar.projectKey=TodouimonolithicSonar'
+        script: 'npx @sonar/scan -D sonar.host.url=http://localhost:9000 -D sonar.token=$(Sonarqube Token) -D sonar.projectKey=TodouimonolithicSonar'
 - stage: linting
   jobs:
   - job: lint
