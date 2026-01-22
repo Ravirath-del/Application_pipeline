@@ -3,6 +3,7 @@ trigger:
 pool: New_Application_pipeline
 variables:
   dir: $(System.DefaultWorkingDirectory)/ReactTodoUIMonolith-main
+- group: Sonarqube Token
 stages:
 - stage: Sonarqube
   jobs:
