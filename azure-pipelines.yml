@@ -1,30 +1,144 @@
 trigger:
 - main
 pool: New_Application_pipeline
-stages:
-- stage: linting
-  jobs:
-  - job: lint
-    displayName: java script linting(Biome)
-    steps:
+parameters:
+- name: environment
+  displayName: "Select Environment"
+  type: string
+  default: dev
+  values:
+    - dev
+    - qa
+    - prod
+# variables:
+# - name: dir
+#   value: $(System.DefaultWorkingDirectory)/ReactTodoUIMonolith-main
+# - group: Sonarqube Token
+# stages:
+# - stage: StaticcodeAnalysis
+#   jobs:
+#   - job: Static_code_AnalysisSonarQube
+#     displayName: Static code Analysis (sonarQube)
+#     steps:
+    # - task: SonarQubePrepare@8
+    #   inputs:
+    #     SonarQube: 'Sonarconnectionnew'
+    #     scannerMode: 'cli'
+    #     configMode: 'manual'
+    #     cliProjectKey: 'TodouimonolithicSonar'
+    #     cliSources: '$(System.DefaultWorkingDirectory)/ReactTodoUIMonolith-main'
+    #     extraProperties: |
+    #       sonar.branch.name=
+    # - task: SonarQubeAnalyze@8
+    #   inputs:
+    #     jdkversion: 'JAVA_HOME_17_X64'
+
+    # - task: PowerShell@2
+    #   displayName: Static code Analysis (sonarQube)
+    #   inputs:
+    #     targetType: 'inline'
+    #     script: 'npx @sonar/scan -D sonar.host.url=http://localhost:9000 -D sonar.token=$(token) -D sonar.projectKey=TodouimonolithicSonar'
+    # - task: SonarQubePublish@8
+    #   displayName: publish sonar result
+    #   inputs:
+    #     pollingTimeoutSec: '300'
+# - stage: linting
+#   jobs:
+#   - job: lint
+#     displayName: java script linting(Biome)
+#     steps:
+
     # - task: PowerShell@2
     #   displayName: js lint (Biome)
     #   inputs:
     #     targetType: 'inline'
     #     script: 'E:\Tools\biome.exe lint $(System.DefaultWorkingDirectory)\ReactTodoUIMonolith-main\src'
-    - task: PowerShell@2
-      displayName: java script linting(Biome url)
-      continueOnError: true
-      inputs:
-        targetType: 'inline'
-        script: |
-          Invoke-WebRequest -Uri "https://github.com/biomejs/biome/releases/download/%40biomejs%2Fbiome%402.3.11/biome-win32-x64.exe" -OutFile "$(Agent.ToolsDirectory)/biome.exe"
-          $(Agent.ToolsDirectory)/biome.exe lint $(System.DefaultWorkingDirectory)/ReactTodoUIMonolith-main/src/
-    - task: PowerShell@2
-      displayName: css lint(stylint)
-      inputs:
-        targetType: 'inline'
-        script: |
-          npm install -g stylelint
-          npm install -g stylelint-config-standard 
-          npx stylelint $(System.DefaultWorkingDirectory)/ReactTodoUIMonolith-main/src/App.css
+#     - task: PowerShell@2
+#       displayName: java script linting(Biome url)
+#       continueOnError: true
+#       inputs:
+#         targetType: 'inline'
+#         script: |
+#           Invoke-WebRequest -Uri "https://github.com/biomejs/biome/releases/download/%40biomejs%2Fbiome%402.3.11/biome-win32-x64.exe" -OutFile "$(Agent.ToolsDirectory)/biome.exe"
+#           $(Agent.ToolsDirectory)/biome.exe lint $(System.DefaultWorkingDirectory)/ReactTodoUIMonolith-main/src/
+#     - task: PowerShell@2
+#       displayName: css lint(stylint)
+#       continueOnError: true
+#       inputs:
+#         targetType: 'inline'
+#         script: |
+#           npm install -g stylelint
+#           npm add -D stylelint stylelint-config-standard
+#           npx stylelint $(System.DefaultWorkingDirectory)/ReactTodoUIMonolith-main/src/App.css
+#     - task: PowerShell@2
+#       displayName: yaml lint (yaml lint)
+#       continueOnError: true
+#       inputs:
+#         targetType: 'inline'
+#         script: |
+#           pip install --user yamllint
+#           python -m yamllint $(System.DefaultWorkingDirectory)/ReactTodoUIMonolith-main
+# - stage: Build
+#   dependsOn: linting
+#   jobs:
+#   - job: build_for_Application
+#     displayName: build_for_Application
+#     steps:
+#     - task: NodeTool@0
+#       displayName: node tool install
+#       inputs:
+#         versionSource: 'spec'
+#         versionSpec: '16.x'
+#     - task: PowerShell@2
+#       displayName: npm install
+#       inputs:
+#         targetType: 'inline'
+#         workingDirectory: $(dir)
+#         script: 'npm install'
+#     - task: PowerShell@2
+#       displayName: npm run build
+#       inputs:
+#         targetType: 'inline'
+#         workingDirectory: $(dir)
+#         script: 'npm run build'
+#     - task: PublishBuildArtifacts@1
+#       continueOnError: true
+#       inputs:
+#         PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+#         ArtifactName: 'todo-ui'
+#         publishLocation: 'Container'
+#     - task: PublishPipelineArtifact@1
+#       inputs:
+#         targetPath: '$(dir)/build'
+#         artifact: 'todo-ui'
+#         publishLocation: 'pipeline'
+# - stage: Continue_Deploy_Application
+#   jobs:
+#   - job: Application_deployement
+#     steps:
+#     - task: DownloadPipelineArtifact@2
+#       displayName: downloading the artifacts
+#       inputs:
+#         buildType: 'current'
+#         artifactName: 'todo-ui'
+#         targetPath: '$(dir)/build_Artifacts'
+#     - task: CopyFilesOverSSH@0
+#       displayName: copy the files in VM
+#       inputs:
+#         sshEndpoint: 'appdeployeconn'
+#         sourceFolder: '$(dir)/build_Artifacts'
+#         contents: '**'
+#         targetFolder: '/home/useradmin'
+#         readyTimeout: '20000'
+#     - task: SSH@0
+#       displayName: copy the files in nginx
+#       continueOnError: true
+#       inputs:
+#         sshEndpoint: 'appdeployeconn'
+#         runOptions: 'inline'
+#         inline: |
+#           sudo apt update
+#           sudo apt install nginx -y
+#           sudo cp -r /home/useradmin/* /var/www/html
+#           sudo systemctl restart nginx
+#         readyTimeout: '20000'
