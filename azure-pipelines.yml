@@ -1,5 +1,5 @@
 trigger:
-- main
+- none
 pool: Application_pipeline
 parameters:
 - name: environment
@@ -78,40 +78,40 @@ stages:
         script: |
           pip install --user yamllint
           python -m yamllint $(System.DefaultWorkingDirectory)/ReactTodoUIMonolith-main
-# - stage: Build
-#   dependsOn: linting
-#   jobs:
-#   - job: build_for_Application
-#     displayName: build_for_Application
-#     steps:
-#     - task: NodeTool@0
-#       displayName: node tool install
-#       inputs:
-#         versionSource: 'spec'
-#         versionSpec: '16.x'
-#     - task: PowerShell@2
-#       displayName: npm install
-#       inputs:
-#         targetType: 'inline'
-#         workingDirectory: $(dir)
-#         script: 'npm install'
-#     - task: PowerShell@2
-#       displayName: npm run build
-#       inputs:
-#         targetType: 'inline'
-#         workingDirectory: $(dir)
-#         script: 'npm run build'
-#     - task: PublishBuildArtifacts@1
-#       continueOnError: true
-#       inputs:
-#         PathtoPublish: '$(Build.ArtifactStagingDirectory)'
-#         ArtifactName: 'todo-ui'
-#         publishLocation: 'Container'
-#     - task: PublishPipelineArtifact@1
-#       inputs:
-#         targetPath: '$(dir)/build'
-#         artifact: 'todo-ui'
-#         publishLocation: 'pipeline'
+- stage: Build
+  dependsOn: linting
+  jobs:
+  - job: build_for_Application
+    displayName: build_for_Application
+    steps:
+    - task: NodeTool@0
+      displayName: node tool install
+      inputs:
+        versionSource: 'spec'
+        versionSpec: '16.x'
+    - task: PowerShell@2
+      displayName: npm install
+      inputs:
+        targetType: 'inline'
+        workingDirectory: $(dir)
+        script: 'npm install'
+    - task: PowerShell@2
+      displayName: npm run build
+      inputs:
+        targetType: 'inline'
+        workingDirectory: $(dir)
+        script: 'npm run build'
+    - task: PublishBuildArtifacts@1
+      continueOnError: true
+      inputs:
+        PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+        ArtifactName: 'todo-ui'
+        publishLocation: 'Container'
+    - task: PublishPipelineArtifact@1
+      inputs:
+        targetPath: '$(dir)/build'
+        artifact: 'todo-ui'
+        publishLocation: 'pipeline'
 # - stage: Continue_Deploy_Application
 #   jobs:
 #   - job: Application_deployement
