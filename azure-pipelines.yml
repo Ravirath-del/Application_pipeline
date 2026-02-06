@@ -48,11 +48,11 @@ stages:
     displayName: java script linting(Biome)
     steps:
 
-    - task: PowerShell@2
-      displayName: js lint (Biome)
-      inputs:
-        targetType: 'inline'
-        script: 'E:\Tools\biome.exe lint $(System.DefaultWorkingDirectory)\ReactTodoUIMonolith-main\src'
+    # - task: PowerShell@2
+    #   displayName: js lint (Biome)
+    #   inputs:
+    #     targetType: 'inline'
+    #     script: 'E:\Tools\biome.exe lint $(System.DefaultWorkingDirectory)\ReactTodoUIMonolith-main\src'
     - task: PowerShell@2
       displayName: java script linting(Biome url)
       continueOnError: true
