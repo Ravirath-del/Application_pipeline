@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: todoui
-        image: firstregstry.azurecr.io/todoui:v2
+        image: firstregstry.azurecr.io/todoui:v3
         ports:
         - containerPort: 80
 ---
