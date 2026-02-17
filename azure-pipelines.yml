@@ -78,50 +78,55 @@ stages:
     #     script: |
     #       pip install --user yamllint
     #       python -m yamllint $(System.DefaultWorkingDirectory)/ReactTodoUIMonolith-main
+
 - stage: Build
+
   #dependsOn: linting
   jobs:
   - job: build_for_Application
+    pool: 
+     vmImage: 'ubuntu-latest'
+
     displayName: build_for_Application
     steps:
-    # - task: NodeTool@0
-    #   displayName: node tool install
+    - task: NodeTool@0
+      displayName: node tool install
+      inputs:
+        versionSource: 'spec'
+        versionSpec: '16.x'
+    - task: PowerShell@2
+      displayName: npm install
+      inputs:
+        targetType: 'inline'
+        workingDirectory: $(dir)
+        script: 'npm install'
+    - task: PowerShell@2
+      displayName: npm run build
+      inputs:
+        targetType: 'inline'
+        workingDirectory: $(dir)
+        script: 'npm run build'
+    # - task: DockerInstaller@0
     #   inputs:
-    #     versionSource: 'spec'
-    #     versionSpec: '16.x'
-    # - task: PowerShell@2
-    #   displayName: npm install
-    #   inputs:
-    #     targetType: 'inline'
-    #     workingDirectory: $(dir)
-    #     script: 'npm install'
-    # - task: PowerShell@2
-    #   displayName: npm run build
-    #   inputs:
-    #     targetType: 'inline'
-    #     workingDirectory: $(dir)
-    #     script: 'npm run build'
-    # # - task: DockerInstaller@0
-    # #   inputs:
-    # #     dockerVersion: '17.09.0-ce'
-    # - task: Docker@2
-    #   continueOnError: true
-    #   inputs:
-    #     containerRegistry: 'new-conn'
-    #     command: 'login'
+    #     dockerVersion: '17.09.0-ce'
+    - task: Docker@2
+      continueOnError: true
+      inputs:
+        containerRegistry: 'new-conn'
+        command: 'login'
 
-    # - task: Docker@2
-    #   inputs:
-    #     containerRegistry: 'new-conn'
-    #     repository: 'todoui'
-    #     command: 'buildAndPush'
-    #     Dockerfile: '$(dir)/Dockerfile'
-    #     tags: 'v2'
+    - task: Docker@2
+      inputs:
+        containerRegistry: 'new-conn'
+        repository: 'todoui'
+        command: 'buildAndPush'
+        Dockerfile: '$(dir)/Dockerfile'
+        tags: 'v3'
     # - task: KubectlInstaller@0
     #   inputs:
     #     kubectlVersion: 'latest'
-      - task: Kubernetes@1
-        inputs:
+    - task: Kubernetes@1
+      inputs:
           connectionType: 'Azure Resource Manager'
           azureSubscriptionEndpoint: 'Azure subscription 1 (0530127f-d2d3-4611-8869-f037cf715c3f)'
           azureResourceGroup: 'ravi-RG'
