@@ -88,39 +88,39 @@ stages:
 
     displayName: build_for_Application
     steps:
-    - task: NodeTool@0
-      displayName: node tool install
-      inputs:
-        versionSource: 'spec'
-        versionSpec: '16.x'
-    - task: PowerShell@2
-      displayName: npm install
-      inputs:
-        targetType: 'inline'
-        workingDirectory: $(dir)
-        script: 'npm install'
-    - task: PowerShell@2
-      displayName: npm run build
-      inputs:
-        targetType: 'inline'
-        workingDirectory: $(dir)
-        script: 'npm run build'
-    # - task: DockerInstaller@0
+    # - task: NodeTool@0
+    #   displayName: node tool install
     #   inputs:
-    #     dockerVersion: '17.09.0-ce'
-    - task: Docker@2
-      continueOnError: true
-      inputs:
-        containerRegistry: 'new-conn'
-        command: 'login'
+    #     versionSource: 'spec'
+    #     versionSpec: '16.x'
+    # - task: PowerShell@2
+    #   displayName: npm install
+    #   inputs:
+    #     targetType: 'inline'
+    #     workingDirectory: $(dir)
+    #     script: 'npm install'
+    # - task: PowerShell@2
+    #   displayName: npm run build
+    #   inputs:
+    #     targetType: 'inline'
+    #     workingDirectory: $(dir)
+    #     script: 'npm run build'
+    # # - task: DockerInstaller@0
+    # #   inputs:
+    # #     dockerVersion: '17.09.0-ce'
+    # - task: Docker@2
+    #   continueOnError: true
+    #   inputs:
+    #     containerRegistry: 'new-conn'
+    #     command: 'login'
 
-    - task: Docker@2
-      inputs:
-        containerRegistry: 'new-conn'
-        repository: 'todoui'
-        command: 'buildAndPush'
-        Dockerfile: '$(dir)/Dockerfile'
-        tags: 'v3'
+    # - task: Docker@2
+    #   inputs:
+    #     containerRegistry: 'new-conn'
+    #     repository: 'todoui'
+    #     command: 'buildAndPush'
+    #     Dockerfile: '$(dir)/Dockerfile'
+    #     tags: 'v3'
     # - task: KubectlInstaller@0
     #   inputs:
     #     kubectlVersion: 'latest'
