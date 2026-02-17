@@ -84,54 +84,54 @@ stages:
   - job: build_for_Application
     displayName: build_for_Application
     steps:
-    - task: NodeTool@0
-      displayName: node tool install
-      inputs:
-        versionSource: 'spec'
-        versionSpec: '16.x'
-    - task: PowerShell@2
-      displayName: npm install
-      inputs:
-        targetType: 'inline'
-        workingDirectory: $(dir)
-        script: 'npm install'
-    - task: PowerShell@2
-      displayName: npm run build
-      inputs:
-        targetType: 'inline'
-        workingDirectory: $(dir)
-        script: 'npm run build'
-    # - task: DockerInstaller@0
+    # - task: NodeTool@0
+    #   displayName: node tool install
     #   inputs:
-    #     dockerVersion: '17.09.0-ce'
-    - task: Docker@2
-      continueOnError: true
-      inputs:
-        containerRegistry: 'new-conn'
-        command: 'login'
+    #     versionSource: 'spec'
+    #     versionSpec: '16.x'
+    # - task: PowerShell@2
+    #   displayName: npm install
+    #   inputs:
+    #     targetType: 'inline'
+    #     workingDirectory: $(dir)
+    #     script: 'npm install'
+    # - task: PowerShell@2
+    #   displayName: npm run build
+    #   inputs:
+    #     targetType: 'inline'
+    #     workingDirectory: $(dir)
+    #     script: 'npm run build'
+    # # - task: DockerInstaller@0
+    # #   inputs:
+    # #     dockerVersion: '17.09.0-ce'
+    # - task: Docker@2
+    #   continueOnError: true
+    #   inputs:
+    #     containerRegistry: 'new-conn'
+    #     command: 'login'
 
-    - task: Docker@2
-      inputs:
-        containerRegistry: 'new-conn'
-        repository: 'todoui'
-        command: 'buildAndPush'
-        Dockerfile: '$(dir)/Dockerfile'
-        tags: 'v2'
-    - task: KubectlInstaller@0
-      inputs:
-        kubectlVersion: 'latest'
-    - task: Kubernetes@1
-      inputs:
-        connectionType: 'Azure Resource Manager'
-        azureSubscriptionEndpoint: 'Azure subscription 1 (0530127f-d2d3-4611-8869-f037cf715c3f)'
-        azureResourceGroup: 'ravi-RG'
-        kubernetesCluster: 'my_aks'
-        namespace: 'default'
-        command: 'apply'
-        secretType: 'dockerRegistry'
-        containerRegistryType: 'Azure Container Registry'
-        azureSubscriptionEndpointForSecrets: 'Azure subscription 1 (0530127f-d2d3-4611-8869-f037cf715c3f)'
-        azureContainerRegistry: 'firstregstry.azurecr.io'
+    # - task: Docker@2
+    #   inputs:
+    #     containerRegistry: 'new-conn'
+    #     repository: 'todoui'
+    #     command: 'buildAndPush'
+    #     Dockerfile: '$(dir)/Dockerfile'
+    #     tags: 'v2'
+    # - task: KubectlInstaller@0
+    #   inputs:
+    #     kubectlVersion: 'latest'
+      - task: Kubernetes@1
+        inputs:
+          connectionType: 'Azure Resource Manager'
+          azureSubscriptionEndpoint: 'Azure subscription 1 (0530127f-d2d3-4611-8869-f037cf715c3f)'
+          azureResourceGroup: 'ravi-RG'
+          kubernetesCluster: 'my_aks'
+          namespace: 'default'
+          command: 'apply'
+          useConfigurationFile: true
+          configuration: '$(System.DefaultWorkingDirectory)/ReactTodoUIMonolith-main/k8s/deployment.yaml'
+          secretType: 'dockerRegistry'
+          containerRegistryType: 'Azure Container Registry'
     # - task: Docker@2
     #   inputs:
     #     containerRegistry: 'new-conn'
