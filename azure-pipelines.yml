@@ -1,6 +1,7 @@
 trigger:
 - none
-pool: Application_pipeline
+pool: 
+ vmImage: 'ubuntu-latest'
 # parameters:
 # - name: environment
 #   displayName: "Select Environment"
@@ -84,8 +85,7 @@ stages:
   #dependsOn: linting
   jobs:
   - job: build_for_Application
-    pool: 
-     vmImage: 'ubuntu-latest'
+
 
     displayName: build_for_Application
     steps:
