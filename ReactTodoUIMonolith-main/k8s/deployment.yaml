@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: todoui
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: todoui
+  template:
+    metadata:
+      labels:
+        app: todoui
+    spec:
+      containers:
+      - name: todoui
+        image: firstregstry.azurecr.io/todoui:v2
+        ports:
+        - containerPort: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: todoui-service
+spec:
+  type: LoadBalancer
+  selector:
+    app: todoui
+  ports:
+    - port: 80
+      targetPort: 80
