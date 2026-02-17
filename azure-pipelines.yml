@@ -114,14 +114,14 @@ stages:
         containerRegistry: 'new-conn'
         command: 'buildAndPush'
         Dockerfile: '$(dir)/Dockerfile'
-    - task: PowerShell@2
-      inputs:
-        targetType: 'inline'
-        script: 'docker build -t firstregstry.azurecr.io/todoui .'
-    - task: PowerShell@2
-      inputs:
-        targetType: 'inline'
-        script: 'docker push firstregstry.azurecr.io/todoui'
+    # - task: PowerShell@2
+    #   inputs:
+    #     targetType: 'inline'
+    #     script: 'docker build -t firstregstry.azurecr.io/todoui .'
+    # - task: PowerShell@2
+    #   inputs:
+    #     targetType: 'inline'
+    #     script: 'docker push firstregstry.azurecr.io/todoui'
     
     # - task: PublishBuildArtifacts@1
     #   continueOnError: true
