@@ -88,23 +88,23 @@ stages:
 
     displayName: build_for_Application
     steps:
-    # - task: NodeTool@0
-    #   displayName: node tool install
-    #   inputs:
-    #     versionSource: 'spec'
-    #     versionSpec: '16.x'
-    # - task: PowerShell@2
-    #   displayName: npm install
-    #   inputs:
-    #     targetType: 'inline'
-    #     workingDirectory: $(dir)
-    #     script: 'npm install'
-    # - task: PowerShell@2
-    #   displayName: npm run build
-    #   inputs:
-    #     targetType: 'inline'
-    #     workingDirectory: $(dir)
-    #     script: 'npm run build'
+    - task: NodeTool@0
+      displayName: node tool install
+      inputs:
+        versionSource: 'spec'
+        versionSpec: '16.x'
+    - task: PowerShell@2
+      displayName: npm install
+      inputs:
+        targetType: 'inline'
+        workingDirectory: $(dir)
+        script: 'npm install'
+    - task: PowerShell@2
+      displayName: npm run build
+      inputs:
+        targetType: 'inline'
+        workingDirectory: $(dir)
+        script: 'npm run build'
     # # - task: DockerInstaller@0
     # #   inputs:
     # #     dockerVersion: '17.09.0-ce'
