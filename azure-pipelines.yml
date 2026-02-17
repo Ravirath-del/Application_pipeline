@@ -117,6 +117,21 @@ stages:
         command: 'buildAndPush'
         Dockerfile: '$(dir)/Dockerfile'
         tags: 'v2'
+    - task: KubectlInstaller@0
+      inputs:
+        kubectlVersion: 'latest'
+    - task: Kubernetes@1
+      inputs:
+        connectionType: 'Azure Resource Manager'
+        azureSubscriptionEndpoint: 'Azure subscription 1 (0530127f-d2d3-4611-8869-f037cf715c3f)'
+        azureResourceGroup: 'ravi-RG'
+        kubernetesCluster: 'my_aks'
+        namespace: 'default'
+        command: 'apply'
+        secretType: 'dockerRegistry'
+        containerRegistryType: 'Azure Container Registry'
+        azureSubscriptionEndpointForSecrets: 'Azure subscription 1 (0530127f-d2d3-4611-8869-f037cf715c3f)'
+        azureContainerRegistry: 'firstregstry.azurecr.io'
     # - task: Docker@2
     #   inputs:
     #     containerRegistry: 'new-conn'
