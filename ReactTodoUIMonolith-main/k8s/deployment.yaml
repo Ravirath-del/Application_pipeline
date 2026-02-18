@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: todoui
-        image: firstregstry.azurecr.io/todouinew:v4
+        image: firstregstry.azurecr.io/nginx:alpine
         ports:
         - containerPort: 80
 ---
