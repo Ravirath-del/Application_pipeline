@@ -125,6 +125,7 @@ stages:
     #   inputs:
     #     kubectlVersion: 'latest'
     - task: KubernetesManifest@1
+      continueOnError: true
       inputs:
         action: 'deploy'
         connectionType: 'azureResourceManager'
