@@ -88,42 +88,52 @@ stages:
 
     displayName: build_for_Application
     steps:
-    - task: NodeTool@0
-      displayName: node tool install
-      inputs:
-        versionSource: 'spec'
-        versionSpec: '16.x'
-    - task: PowerShell@2
-      displayName: npm install
-      inputs:
-        targetType: 'inline'
-        workingDirectory: $(dir)
-        script: 'npm install'
-    - task: PowerShell@2
-      displayName: npm run build
-      inputs:
-        targetType: 'inline'
-        workingDirectory: $(dir)
-        script: 'npm run build'
-    # # - task: DockerInstaller@0
-    # #   inputs:
-    # #     dockerVersion: '17.09.0-ce'
-    - task: Docker@2
-      continueOnError: true
-      inputs:
-        containerRegistry: 'new-conn'
-        command: 'login'
+    # - task: NodeTool@0
+    #   displayName: node tool install
+    #   inputs:
+    #     versionSource: 'spec'
+    #     versionSpec: '16.x'
+    # - task: PowerShell@2
+    #   displayName: npm install
+    #   inputs:
+    #     targetType: 'inline'
+    #     workingDirectory: $(dir)
+    #     script: 'npm install'
+    # - task: PowerShell@2
+    #   displayName: npm run build
+    #   inputs:
+    #     targetType: 'inline'
+    #     workingDirectory: $(dir)
+    #     script: 'npm run build'
+    # # # - task: DockerInstaller@0
+    # # #   inputs:
+    # # #     dockerVersion: '17.09.0-ce'
+    # - task: Docker@2
+    #   continueOnError: true
+    #   inputs:
+    #     containerRegistry: 'new-conn'
+    #     command: 'login'
 
-    - task: Docker@2
-      inputs:
-        containerRegistry: 'new-conn'
-        repository: 'todouinew'
-        command: 'buildAndPush'
-        Dockerfile: '$(dir)/Dockerfile'
-        tags: 'v4'
+    # - task: Docker@2
+    #   inputs:
+    #     containerRegistry: 'new-conn'
+    #     repository: 'todouinew'
+    #     command: 'buildAndPush'
+    #     Dockerfile: '$(dir)/Dockerfile'
+    #     tags: 'v4'
     # - task: KubectlInstaller@0
     #   inputs:
     #     kubectlVersion: 'latest'
+    - task: KubernetesManifest@1
+      inputs:
+        action: 'deploy'
+        connectionType: 'azureResourceManager'
+        azureSubscriptionConnection: 'Azure subscription 1 (0530127f-d2d3-4611-8869-f037cf715c3f)'
+        azureResourceGroup: 'ravi-RG'
+        kubernetesCluster: 'my_aks'
+        useClusterAdmin: true
+        namespace: 'default'
+        manifests: '$(dir)/k8s/deployment.yaml'
     - task: Kubernetes@1
       inputs:
           connectionType: 'Azure Resource Manager'
