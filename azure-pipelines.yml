@@ -124,17 +124,17 @@ stages:
     # - task: KubectlInstaller@0
     #   inputs:
     #     kubectlVersion: 'latest'
-    - task: KubernetesManifest@1
-      continueOnError: true
-      inputs:
-        action: 'deploy'
-        connectionType: 'azureResourceManager'
-        azureSubscriptionConnection: 'Azure subscription 1 (0530127f-d2d3-4611-8869-f037cf715c3f)'
-        azureResourceGroup: 'ravi-RG'
-        kubernetesCluster: 'my_aks'
-        useClusterAdmin: true
-        namespace: 'default'
-        manifests: '$(dir)/k8s/deployment.yaml'
+    # - task: KubernetesManifest@1
+    #   continueOnError: true
+    #   inputs:
+    #     action: 'deploy'
+    #     connectionType: 'azureResourceManager'
+    #     azureSubscriptionConnection: 'Azure subscription 1 (0530127f-d2d3-4611-8869-f037cf715c3f)'
+    #     azureResourceGroup: 'ravi-RG'
+    #     kubernetesCluster: 'my_aks'
+    #     useClusterAdmin: true
+    #     namespace: 'default'
+    #     manifests: '$(dir)/k8s/deployment.yaml'
     - task: Kubernetes@1
       inputs:
           connectionType: 'Azure Resource Manager'
